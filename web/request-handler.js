@@ -37,9 +37,7 @@ module.exports.handleRequest = function (req, res) {
   if(req.method === 'GET'){
     if(req.url === '/'){
       fs.readFile(__dirname + '/public/index.html', 'utf8', function(err, data) {
-        if (err) {
-          console.log(err);
-        }
+        if (err) throw err;
         sendJSON(res, data, 200);
       });
     } else if(dotCom.test(url.parse(req.url).path)) {

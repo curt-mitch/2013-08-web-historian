@@ -27,8 +27,10 @@ describe("html fetcher helpers", function(){
     });
   });
 
-  xit("should have a 'downloadUrls' function", function(){
+  it("should have a 'downloadUrls' function", function(){
     var result = htmlFetcherHelpers.downloadUrls();
-    expect(result).toBeTruthy();
+    setTimeout(function(){
+      expect(result).toBeTruthy();
+    }, 1000);
   });
 });
