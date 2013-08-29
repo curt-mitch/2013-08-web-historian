@@ -1,16 +1,25 @@
+var http = require('http-get');
 var fs = require('fs');
 
 exports.readUrls = function(filePath, cb){
   fs.readFile(filePath, 'utf8', function(err, data) {
-    if (err) throw err;
+    console.log("data: " + data);
+    console.log("filePath: " + filePath);
+    if (err) {
+      console.log(err);
+    }
     cb(data.split('\n'));
   });
 
 };
 
-exports.downloadUrls = function(urls){
-  fs.writeFile(__dirname + '../data/sites/', urls, function(){
-    console.log('hello');
-    console.log(urls);
+
+exports.downloadUrls = function(url, path){
+  http.get(url, path, function(error, result){
+    if (error) {
+      console.error(error);
+    } else {
+      console.log('success @' + result.file);
+    }
   });
 };
