@@ -15,7 +15,7 @@ var headers = {
 };
 
 var sendJSON = function(response, obj, status){
-  status = status || 200;
+  status = status || 404;
   response.writeHead(status, headers);
   response.end(JSON.stringify(obj));
 };
@@ -32,17 +32,30 @@ module.exports.recData = recData = function(request, callback){
 
 module.exports.handleRequest = function (req, res) {
   // console.log(exports.datadir);
-  if(req.method === "GET"){
-    if(req.url === "/"){
+  // console.log(req);
+  var dotCom = /\.*\./;
+  if(req.method === 'GET'){
+    if(req.url === '/'){
       fs.readFile(__dirname + '/public/index.html', 'utf8', function(err, data) {
         if (err) {
-          console.log('nope');
+          console.log(err);
         }
-        sendJSON(res, data);
+        sendJSON(res, data, 200);
       });
+    } else if(dotCom.test(url.parse(req.url).path)) {
+      sendJSON(res, url.parse(req.url), 200);
     } else {
-      sendJSON(res, url.parse(req.url));
-      }
+      sendJSON(res, url.parse(req.url), 404);
     }
+  }
+
+  if (req.method === 'POST') {
+    if (req.url === '/') {
+      fs.writeFile(module.exports.datadir, sendJSON(res, url.parse(req.url), 302), function(err){
+        if (err) throw err;
+      });
+    }
+  }
+
   res.end();
 };
